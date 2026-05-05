@@ -16,6 +16,8 @@ setfield({
         <h1>Register User</h1>
      </div>
 
+     
+
 {/* body div */}
      <div>
 <input type="text" placeholder='Name' name='name' value={field.name} onChange={changefield} />
