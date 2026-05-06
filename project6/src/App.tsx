@@ -1,14 +1,22 @@
 import React from 'react'
 import {Route, Routes} from 'react-router-dom'
-import Regpage from './pages/regpage'
+import Loginpage from './pages/loginpage'
+import Regpage from './pages/Regpage'
+import Homepage from './pages/homepage'
 
 const App = () => {
   return (
     <div>
+      <div>
+       <h1> Upload documentds </h1>
+      </div>
    <Routes>
-<Route path="/" element={<div><Regpage/></div>}/>
+    {/* page for the register user */}
+<Route path="/register" element={<div><Regpage/></div>}/>
 
+<Route path='/' element={<Loginpage/>}/>
 
+<Route path='/home' element={<Homepage/>}/>
    </Routes>
 
     </div>
