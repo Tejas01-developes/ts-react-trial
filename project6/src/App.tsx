@@ -7,15 +7,14 @@ import Homepage from './pages/Homepage.js'
 const App = () => {
   return (
     <div>
-      <div>
-       <h1> Upload documentds </h1>
-      </div>
    <Routes>
     {/* page for the register user */}
 <Route path="/register" element={<div><Regpage/></div>}/>
 
+{/* logine page */}
 <Route path='/' element={<Loginpage/>}/>
 
+{/* home page */}
 <Route path='/home' element={<Homepage/>}/>
    </Routes>
 
