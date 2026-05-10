@@ -17,11 +17,11 @@ const handlelogin=async()=>{
   }
   const register=await axios.post("http://localhost:3000/apis/login",field)
   if(register.data.success){
-    alert("user registered succesfully");
-navigate("/")
+    alert("user login succesfully");
+navigate("/home")
 return
   }
-  alert("registration failed")
+  alert("password is incorrect")
   return
 }
 
