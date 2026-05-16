@@ -12,16 +12,17 @@ setfield({
 const navigate=useNavigate();
 const handlelogin=async()=>{
   if(!field.email || !field.password){
-    alert("fill up ll the fields")
+    alert("fill up all the fields")
     return
   }
-  const register=await axios.post("http://localhost:3000/apis/login",field)
-  if(register.data.success){
+  const loginurl=await axios.post("http://localhost:3000/apis/login",field)
+  if(loginurl.data.success){
     alert("user login succesfully");
 navigate("/home")
 return
   }
-  alert("password is incorrect")
+
+  alert(loginurl.data.message)
   return
 }
 
