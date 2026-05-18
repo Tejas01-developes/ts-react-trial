@@ -1,15 +1,22 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useAuth } from "../accesstknhandle"
+import { useNavigate } from "react-router"
 
 
 const Homepage = () => {
 
 const[data,setdata]=useState([])
-
-
+const navigate=useNavigate()
+const{getaccesstoken}=useAuth()
   useEffect(()=>{
+ 
     const getusers=async()=>{
       try{
+        const token=getaccesstoken();
+        if(!token){
+        return  navigate("/")
+        }
       const getusersurl=await axios.get("http://localhost:3000/apis/get")
       if(getusersurl.data.success){
         setdata(getusersurl.data.message)
