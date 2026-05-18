@@ -2,7 +2,7 @@ import { createContext, useContext, useRef } from "react";
 
 const authcontext=createContext(null);
 
-export const authprovider=({children})=>{
+export const AuthProvider=({children})=>{
 const accesstokenref=useRef(null);
 
 const setaccesstoken=(token)=>{
