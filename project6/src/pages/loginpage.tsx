@@ -15,9 +15,10 @@ const handlelogin=async()=>{
     alert("fill up all the fields")
     return
   }
-  const loginurl=await axios.post("http://localhost:3000/apis/login",field)
+  const loginurl=await axios.post("http://localhost:3000/apis/login",field,{withCredentials:true,headers:{"Content-Type":"application/json"}})
   if(loginurl.data.success){
     alert("user login succesfully");
+    console.log(loginurl.data.accesstkn)
 navigate("/home")
 return
   }
