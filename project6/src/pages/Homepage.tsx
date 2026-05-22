@@ -7,15 +7,44 @@ import { useNavigate } from "react-router"
 const Homepage = () => {
 
 const[data,setdata]=useState([])
+const[loading,setloading]=useState(true)
 const navigate=useNavigate()
-const{getaccesstoken}=useAuth()
+const{setaccess,getaccesstoken}=useAuth()
+
+useEffect(()=>{
+const refreshfunction=async()=>{
+if(getaccesstoken){
+  setloading(false)
+  return
+}
+try{
+  const regenerate_access=await axios.post("http://localhost:3000/apis/refreshfilter",{},{withCredentials:true})
+
+  if(regenerate_access.data.success){
+return setaccess(regenerate_access.data.access)
+  }else{
+  return navigate("/")
+  }
+}catch(err){
+navigate("/")
+}finally{
+  setloading(false)
+}
+}
+
+
+refreshfunction()
+},[loading])
+
+
+
   useEffect(()=>{
  
     const getusers=async()=>{
       try{
         const token=getaccesstoken();
         if(!token){
-        return  navigate("/")
+        return  
         }
       const getusersurl=await axios.get("http://localhost:3000/apis/get")
       if(getusersurl.data.success){
@@ -29,9 +58,20 @@ throw new Error("get user frontend failed")
       }
 
     }
+    if(!loading){
 getusers()
+    }
+  
 
-  },[])
+
+  },[loading])
+
+  if(loading){
+    return <h1>Verifying session.............</h1>
+  }
+
+
+
   return (
     <div>
       <input type="file" />
