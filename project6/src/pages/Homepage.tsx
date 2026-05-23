@@ -12,6 +12,8 @@ const navigate=useNavigate()
 const{setaccess,getaccesstoken}=useAuth()
 
 useEffect(()=>{
+
+  const token=getaccesstoken();
 const refreshfunction=async()=>{
 if(getaccesstoken){
   setloading(false)
@@ -38,33 +40,7 @@ refreshfunction()
 
 
 
-  useEffect(()=>{
- 
-    const getusers=async()=>{
-      try{
-        const token=getaccesstoken();
-        if(!token){
-        return  
-        }
-      const getusersurl=await axios.get("http://localhost:3000/apis/get")
-      if(getusersurl.data.success){
-        setdata(getusersurl.data.message)
-       }else{ 
-        return alert(getusersurl.data.message)
-      }
-    }
-      catch(err){
-throw new Error("get user frontend failed")
-      }
-
-    }
-    if(!loading){
-getusers()
-    }
   
-
-
-  },[loading])
 
   if(loading){
     return <h1>Verifying session.............</h1>
