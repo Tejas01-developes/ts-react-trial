@@ -5,17 +5,16 @@ import { useNavigate } from "react-router"
 
 
 const Homepage = () => {
-
-const[data,setdata]=useState([])
+const[file,setfile]=useState(null)
 const[loading,setloading]=useState(true)
 const navigate=useNavigate()
 const{setaccess,getaccesstoken}=useAuth()
 
 useEffect(()=>{
 
-  const token=getaccesstoken();
+  
 const refreshfunction=async()=>{
-if(getaccesstoken){
+if(getaccesstoken()){
   setloading(false)
   return
 }
@@ -39,6 +38,40 @@ refreshfunction()
 },[loading])
 
 
+const uploadfun=async()=>{
+
+try{
+const getuploadurl=await axios.post("http://localhost:3000/apis/upload",{},{headers:{
+Authorization:`Bearer ${getaccesstoken}`
+},
+  params:{
+    filename:file.name,
+    filetype:file.type
+  },
+})
+if(getuploadurl.data.success){
+const url=getuploadurl.data.uploadurl
+const uniquenm=getuploadurl.data.uniquename
+  const uploadfile=await axios.put(url,file,{
+    headers:{
+      "Content-Type":file.type
+    }
+  })
+  await axios.post("http://localhost:3000/apis/dbupload",{
+    filename:file.name,
+    filetype:file.type
+  },{headers:{Authorization:`Bearer ${getaccesstoken}`}})
+  alert("upload of document and meta data  complet")
+  setfile(null)
+  return
+}
+}catch(err){
+console.log(err)
+alert("upload failed")
+}
+}
+
+
 
   
 
@@ -50,21 +83,9 @@ refreshfunction()
 
   return (
     <div>
-      <input type="file" />
-      <button>Upload</button>
-
-
-      <div style={{display:"flex", alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
-        {
-          data.map((i,key)=>(
-            <div key={key}>
-          name:{i.name} ,
-          email:{i.email}
-             
-            </div>
-          ))
-        }
-      </div>
+      <input type="file" onChange={(e)=>setfile(e.target.files[0])} />
+      <button onClick={uploadfun}>Upload</button>
+{file &&<p>{file.name}</p>}
     </div>
   )
 }
