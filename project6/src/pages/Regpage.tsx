@@ -13,7 +13,7 @@ setfield({
 
 const handleregister=async()=>{
   if(!field.name || !field.email || !field.password){
-    alert("fill up ll the fields")
+    alert("fill up all the fields")
     return
   }
   const register=await axios.post("http://localhost:3000/apis/",field)

@@ -36,8 +36,27 @@ await expect(page).toHaveURL("http://localhost:5173")
 })
 
 
-test("should show failurwe when backend sends false",()=>{
-    
+test("should show failure when backend sends false",async({page})=>{
+
+    await page.route("http://localhost:3000/apis/",async route=>{
+        await route.fulfill({
+            status:200,
+            contentType:"application/json",
+            body:JSON.stringify({success:false})
+        })
+    })
+    page.once("dialog",dilog=>{
+        expect(dilog.message).toBe("registration failed")
+        dilog.accept()
+    })
+await page.getByPlaceholder("Name").fill("Tejas")
+await page.getByPlaceholder("Email").fill("t@gmail.com")
+await page.getByPlaceholder("Password").fill("12345")
+
+await page.getByRole("button",{name:"Register"}).click()
+
+await expect(page).toHaveURL("http://localhost:5173/register")
+
 })
 
 })
