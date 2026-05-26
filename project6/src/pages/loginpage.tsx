@@ -11,7 +11,8 @@ setfield({
 })
 }
 const navigate=useNavigate();
-const handlelogin=async()=>{
+const handlelogin=async(e)=>{
+  e.preventDefault()
   if(!field.email || !field.password){
     alert("fill up all the fields")
     return
@@ -24,7 +25,7 @@ navigate("/home")
 return
   }
 
-  alert(loginurl.data.message)
+  alert("login failed")
   return
 }
 
