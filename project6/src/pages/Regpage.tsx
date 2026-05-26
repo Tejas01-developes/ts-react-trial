@@ -11,7 +11,9 @@ setfield({
 })
 }
 
-const handleregister=async()=>{
+const handleregister=async(e)=>{
+
+  e.preventDefault()
   if(!field.name || !field.email || !field.password){
     alert("fill up all the fields")
     return
