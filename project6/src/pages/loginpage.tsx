@@ -1,10 +1,12 @@
 import axios from 'axios';
 import  { useState } from 'react';
 import { useNavigate } from 'react-router'
-import { useAuth } from '../accesstknhandle';
+
+
+
 const Loginpage = () => {
   const[field,setfield]=useState({email:"",password:""})
-const{setaccesstoken}=useAuth()
+// const{setaccesstoken}=useAuth()
 const changefield=(e)=>{
 setfield({
     ...field,[e.target.name]:e.target.value
@@ -20,7 +22,7 @@ const handlelogin=async(e)=>{
   const loginurl=await axios.post("http://localhost:3000/apis/login",field,{withCredentials:true,headers:{"Content-Type":"application/json"}})
   if(loginurl.data.success){
     alert("user login succesfully");
-    setaccesstoken(loginurl.data.accesstkn)
+    // setaccesstoken(loginurl.data.accesstkn)
 navigate("/home")
 return
   }
