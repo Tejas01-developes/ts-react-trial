@@ -1,19 +1,17 @@
 import axios from 'axios'
-
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 const Home = () => {
+
+
     const navigate=useNavigate()
 const[data,setdata]=useState()
 const[loading,setloading]=useState(true)
 const[file,setfile]=useState(null)
 const fileref=useRef(null)
 
-const handlefile=(e)=>{
-const selectfile=e.target.files[0]
-setfile(selectfile)
-}
+
 
     useEffect(()=>{
 const filter=async()=>{
@@ -40,15 +38,66 @@ navigate("/")
 filter()
     },[])
 
-if(fileref.current){
-    fileref.current.value=""
+
+const fileupload=async()=>{
+    if(!file){
+        alert("select the file first")
+        return
+    }
+   
+   
+const presignedurlupload=await axios.post("http://localhost:3000/apis/upload",
+    {},
+    {
+        params:{filename:file.name,
+        filetype:file.type},
+
+        headers:{
+            Authorization:`Bearer ${data}`
+        }
+       },
+    
+)
+if(presignedurlupload.data.success){
+    const url=presignedurlupload.data.uploadurl
+    console.log(url)
+    const upload=await axios.put(url,file,{
+        headers:{
+            "Content-Type":file.type
+        }
+    })
+    if(upload.status === 200){
+        const payload={
+            filename:file.name,
+            filetype:file.type
+        }
+    const dbres=await axios.post("http://localhost:3000/apis/dbupload",payload,
+       {headers:{Authorization:`Bearer ${data}`}}
+    )
+    if(dbres.data.success){
+        alert("document upload succesfully done")
+        setfile(null)
+        fileref.current=fileref.current.value=""
+        return
+    }   
+    }
+    alert("upload fialed")
+    
 }
+}
+
+
+
+// if(fileref.current){
+//     fileref.current.value=""
+// }
 
   return (
     <div>
         {/* <input type="file" value={file} onChange={handlefile} /> */}
         <input type="file"  ref={fileref} onChange={(e)=>setfile(e.target.files[0])} />
-        <button>Upload</button>
+        <button onClick={fileupload}>Upload Document</button>
+    
         {file?.name}
         
 
