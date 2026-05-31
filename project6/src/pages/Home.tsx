@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
+import  { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 const Home = () => {
@@ -9,6 +9,7 @@ const Home = () => {
 const[data,setdata]=useState()
 const[loading,setloading]=useState(true)
 const[file,setfile]=useState(null)
+const[url,seturl]=useState(null)
 const fileref=useRef(null)
 
 
@@ -60,6 +61,7 @@ const presignedurlupload=await axios.post("http://localhost:3000/apis/upload",
 )
 if(presignedurlupload.data.success){
     const url=presignedurlupload.data.uploadurl
+    const uniquename=presignedurlupload.data.uniquename
     console.log(url)
     const upload=await axios.put(url,file,{
         headers:{
@@ -68,7 +70,7 @@ if(presignedurlupload.data.success){
     })
     if(upload.status === 200){
         const payload={
-            filename:file.name,
+            filename:uniquename,
             filetype:file.type
         }
     const dbres=await axios.post("http://localhost:3000/apis/dbupload",payload,
@@ -86,21 +88,44 @@ if(presignedurlupload.data.success){
 }
 }
 
+const getimghandelling=async()=>{
+try{
+    const res=await axios.get("http://localhost:3000/apis/getimg",{headers:{
+        Authorization:`Bearer ${data}`
+    },
+responseType:"blob"
+})
+   const imageurl=URL.createObjectURL(res.data)
+   console.log("Blob Size:", res.data.size, "bytes | Blob Type:", res.data.type);
+   seturl(imageurl)
+}catch(err){
+    console.log(err)
+    alert("loading image failed")
+}
+}
 
+useEffect(()=>{
+return ()=>{
+    if(url){
+        URL.revokeObjectURL(url)
+    }
+}
+},[url])
 
-// if(fileref.current){
-//     fileref.current.value=""
-// }
 
   return (
     <div>
         {/* <input type="file" value={file} onChange={handlefile} /> */}
         <input type="file"  ref={fileref} onChange={(e)=>setfile(e.target.files[0])} />
         <button onClick={fileupload}>Upload Document</button>
-    
+        <button onClick={getimghandelling}>Get</button>
+        <br />
         {file?.name}
         
-
+    { url ? (<img src={url} alt='image fetched from the s3 ' style={{ maxWidth: '100%', height: 'auto' }}/>):
+    <p>Image is still not loaded</p>
+    
+    }
 
 
        <br /><br />

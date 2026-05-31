@@ -1,7 +1,6 @@
-import axios from 'axios'
-import process from 'process'
-import  { useEffect, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router'
+import axios, { Axios, type AxiosResponse } from 'axios'
+import  {useState } from 'react'
+import {useNavigate } from 'react-router'
 const Regpage = () => {
 const[field,setfield]=useState({name:"",email:"",password:""})
 const navigate=useNavigate();
@@ -18,7 +17,7 @@ const handleregister=async(e)=>{
     alert("fill up all the fields")
     return
   }
-  const register=await axios.post("http://localhost:3000/apis/",field)
+  const register:AxiosResponse=await axios.post("http://localhost:3000/apis/",field)
   if(register.data.success){
     alert("user registered succesfully");
 navigate("/")
@@ -27,6 +26,7 @@ return
   alert("registration failed")
   return
 }
+
 
   return (
     <div>
@@ -43,6 +43,7 @@ return
 <input type="text" placeholder='Email' name='email' value={field.email}  onChange={changefield}/>
 <input type="password" placeholder='Password' name='password' value={field.password} onChange={changefield}/>
 <button onClick={handleregister}>Register</button>
+
 
      </div>
     </div>
