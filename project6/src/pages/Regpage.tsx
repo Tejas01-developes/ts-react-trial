@@ -43,7 +43,7 @@ return
 <input type="text" placeholder='Email' name='email' value={field.email}  onChange={changefield}/>
 <input type="password" placeholder='Password' name='password' value={field.password} onChange={changefield}/>
 <button onClick={handleregister}>Register</button>
-
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReGezSd64Ec7xshfyIl855quZ6emH_XA4ZNw&s" alt="" />
 
      </div>
     </div>
