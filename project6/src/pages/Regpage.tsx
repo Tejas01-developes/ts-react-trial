@@ -1,9 +1,14 @@
-import axios, { Axios, type AxiosResponse } from 'axios'
+import axios, {type AxiosResponse } from 'axios'
 import  {useState } from 'react'
 import {useNavigate } from 'react-router'
+
+
+
 const Regpage = () => {
 const[field,setfield]=useState({name:"",email:"",password:""})
 const navigate=useNavigate();
+
+
 const changefield=(e)=>{
 setfield({
     ...field,[e.target.name]:e.target.value
@@ -17,7 +22,9 @@ const handleregister=async(e)=>{
     alert("fill up all the fields")
     return
   }
-  const register:AxiosResponse=await axios.post("http://localhost:3000/apis/",field)
+  // const register:AxiosResponse=await axios.post("http://localhost:3000/apis/",field)
+  console.log("port",import.meta.env.VITE_API_URL)
+  const register:AxiosResponse=await axios.post(`${process.env.PORT}/apis/`,field)
   if(register.data.success){
     alert("user registered succesfully");
 navigate("/")
@@ -51,3 +58,5 @@ return
 }
 
 export default Regpage
+
+
